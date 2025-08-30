@@ -1,10 +1,11 @@
 import axios from 'axios';
+import type { FetchTodosResponse } from '../utils/Types.ts'
 
 const apiUrl: string = 'http://localhost:3001';
 
 export async function getTodosFromServer(
   page?: number,
-  limit?: number,
+  limit: number=1000,
   filter?: 'active' | 'completed' | 'all'
 ) {
   let url = `${apiUrl}/todos`;
@@ -18,8 +19,9 @@ export async function getTodosFromServer(
     url += `?${params.join('&')}`;
   }
 
-  const response = await axios.get(url);
+  const response = await axios.get<FetchTodosResponse>(url);
   console.log(response.data);
+  console.log(response.data.data);
   return response.data;
 }
 
@@ -35,9 +37,9 @@ export const createTodo = async (text: string) => {
 
 export async function updateTodo(
   id: number,
-  data: { text?: string; completed?: boolean }
+  text: string | null,
 ) {
-  const response = await axios.put(`${apiUrl}/todos/${id}`, data);
+  const response = await axios.put(`${apiUrl}/todos/${id}`, {text});
   return response.data;
 }
 

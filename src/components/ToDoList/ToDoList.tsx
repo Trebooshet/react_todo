@@ -1,27 +1,38 @@
 import ToDoItem from '../ToDoItem/ToDoItem';
 import { Box, VStack, Image, Badge, Button } from '@chakra-ui/react';
-import type { ToDoItemType, ToDoListProps } from '../../utils/Types.ts';
+import type { ToDoItemType} from '../../utils/Types.ts';
 import photoOfMe from '../../assets/Photoroom_20250723_235615.png';
+// import {useSelector} from "react-redux";
+import { useAppSelector } from '../../utils/hooks.ts'
 
-function ToDoList({
-  todos = [],
-  sortOrder,
-  setSortOrder,
-  handleEdit,
-  handleDeleteTodo,
-  handleToggleTodo,
-  handleSaveEdited,
-  editedId,
-  editedText,
-  setEditedText,
-}: ToDoListProps) {
+import { useAppDispatch } from '../../utils/hooks.ts'
+import {useEffect, useState} from "react";
+import {fetchTodos} from "../../store/todoSlice.ts";
+
+
+function ToDoList() {
+
+  const dispatch = useAppDispatch();
+
+  const [editedId, setEditedId] = useState<number | null>(null);
+  const [editedText, setEditedText] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState<'active' | 'completed' | 'all'>(
+    'all'
+  );
+
+  const todos = useAppSelector(state => state.todos.todos)
+
+  useEffect(() => {
+   dispatch(fetchTodos())
+  }, [dispatch]);
+
   const sortedToDoItems = (): ToDoItemType[] => {
     let filtered = todos;
 
     if (sortOrder === 'active') {
-      filtered = todos.filter((i) => !i.completed);
+      filtered = todos.filter((i: ToDoItemType) => !i.completed);
     } else if (sortOrder === 'completed') {
-      filtered = todos.filter((i) => i.completed);
+      filtered = todos.filter((i: ToDoItemType) => i.completed);
     }
 
     return [...filtered].sort(
@@ -75,13 +86,9 @@ function ToDoList({
             key={toDoItem.id}
             item={toDoItem}
             editedId={editedId}
+            setEditedId = {setEditedId}
             editedText={editedText}
             setEditedText={setEditedText}
-            handleEdit={handleEdit}
-            handleSaveEdited={handleSaveEdited}
-            // handleUpdateTodo={handleUpdateTodo}
-            handleDeleteTodo={handleDeleteTodo}
-            handleToggleTodo={handleToggleTodo}
           />
         ))}
       </VStack>

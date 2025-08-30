@@ -8,14 +8,13 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useAppDispatch } from '../../utils/hooks.ts'
+import { addTodo } from '../../store/todoSlice.ts';
 
-type AddToDoProps = {
-  addToDoItem: (text: string) => void;
-};
-
-function AddToDo({ addToDoItem }: AddToDoProps) {
+function AddToDo() {
   const [input, setInput] = useState('');
   const [wasSubmitted, setWasSubmitted] = useState(false);
+  const dispatch = useAppDispatch()
 
   const isError = input.trim().length === 0 && wasSubmitted;
 
@@ -28,7 +27,7 @@ function AddToDo({ addToDoItem }: AddToDoProps) {
     setWasSubmitted(true);
     if (input.trim().length === 0) return;
 
-    addToDoItem(input.trim()); // вызываем функцию из App.tsx
+    dispatch(addTodo(input));
     setInput('');
     setWasSubmitted(false);
   }

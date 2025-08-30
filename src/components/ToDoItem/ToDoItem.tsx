@@ -2,21 +2,20 @@ import { HStack, Text, IconButton, Image, Input } from '@chakra-ui/react';
 import { RiDeleteBin6Line, RiEdit2Line } from 'react-icons/ri';
 import type { ToDoItemProps } from '../../utils/Types.ts';
 import { useRef } from 'react';
+import { useAppDispatch } from '../../utils/hooks.ts'
+import { removeTodo, editTodo, toggleTodoItem } from "../../store/todoSlice.ts";
 import checkMark from '../../assets/foni-papik-pro-dddc-p-kartinki-zelenaya-galochka-na-prozrachnom-3.png';
 
 
 export default function ToDoItem({
   item,
   editedId,
+  setEditedId,
   editedText,
   setEditedText,
-  handleEdit,
-  handleSaveEdited,
-  handleDeleteTodo,
-  handleToggleTodo,
-  // handleUpdateTodo,
 }: ToDoItemProps) {
 
+  const dispatch = useAppDispatch();
   const editButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
@@ -27,7 +26,7 @@ export default function ToDoItem({
       p="2"
       w="full"
       justify="space-between"
-      onClick={() => !editedId && handleToggleTodo(item.id)}
+      onClick={() => !editedId && dispatch(toggleTodoItem(item.id))}
       bgGradient={
         item.completed ? 'linear(to-r, green.500, green.900)' : 'transparent'
       }
@@ -37,15 +36,17 @@ export default function ToDoItem({
           value={editedText ?? ''}
           flex="1"
           onChange={(e) => setEditedText(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSaveEdited()}
-          onBlur={
-            (e) => {
-             if (e.relatedTarget === editButtonRef.current) {
-               return
-             }
-             handleSaveEdited()
-           }
-          }
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              dispatch(editTodo({ id: editedId!,  text: editedText }));
+              setEditedId(null)
+            }
+          }}
+          onBlur={(e) => {
+            if (e.relatedTarget === editButtonRef.current) return;
+            dispatch(editTodo({ id: editedId!,  text: editedText }));
+            setEditedId(null)
+          }}
 
           autoFocus
         />
@@ -65,6 +66,7 @@ export default function ToDoItem({
             rounded="full"
             objectFit="cover"
             src={checkMark}
+
           />
         )}
         <IconButton
@@ -75,12 +77,14 @@ export default function ToDoItem({
           onClick={(e) => {
             e.stopPropagation();
             if (item.id === editedId) {
-              handleSaveEdited();
+              dispatch(editTodo({ id: editedId!,  text: editedText }));
+              setEditedId(null)
             } else {
               if (item.completed) {
-                handleToggleTodo(item.id);
+                dispatch(toggleTodoItem(item.id));
               }
-              handleEdit(item.id, item.text);
+              setEditedId(item.id)
+              setEditedText(item.text)
             }
           }}
         />
@@ -90,7 +94,7 @@ export default function ToDoItem({
           icon={<RiDeleteBin6Line />}
           onClick={(e) => {
             e.stopPropagation();
-            handleDeleteTodo(item.id);
+            dispatch(removeTodo(item.id));
           }}
         />
       </HStack>
