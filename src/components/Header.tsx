@@ -13,7 +13,7 @@ export default function Header() {
         <IconButton
           position="absolute"
           right={5}
-          top={4}
+          top={5}
           icon={colorMode === 'light' ? <GoMoon /> : <GoSun />}
           rounded="full"
           aria-label="Theme - switcher"

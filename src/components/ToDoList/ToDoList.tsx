@@ -26,7 +26,7 @@ function ToDoList({
 
     return [...filtered].sort(
       (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   };
   if (sortedToDoItems().length === 0) {
