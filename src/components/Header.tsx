@@ -7,8 +7,8 @@ export default function Header() {
   return (
     <>
       <VStack
-        mt="2"
         position="relative"
+        mt={'-2'}
       >
         <IconButton
           position="absolute"
@@ -25,7 +25,7 @@ export default function Header() {
           fontWeight="extrabold"
           bgGradient="linear(to-r, orange.700, orange.500, orange.300)"
           bgClip={'text'}
-          mb={'2'}
+          mb={'1'}
         >
           To Do App
         </Heading>

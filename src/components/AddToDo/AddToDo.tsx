@@ -8,28 +8,38 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useAppDispatch } from '../../utils/hooks.ts'
-import { addTodo } from '../../store/todoSlice.ts';
+import {useAppDispatch, useAppSelector} from '../../utils/hooks.ts'
+import { addTodo, fetchTodos } from '../../store/todoSlice.ts';
+import {setPage} from "../../store/todoSlice.ts";
 
 function AddToDo() {
   const [input, setInput] = useState('');
   const [wasSubmitted, setWasSubmitted] = useState(false);
   const dispatch = useAppDispatch()
-
   const isError = input.trim().length === 0 && wasSubmitted;
+  const limit = useAppSelector(state => state.todos.limit)
+  const filter = useAppSelector(state => state.todos.filter)
+
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setWasSubmitted(false);
     setInput(e.target.value);
   }
 
-  function handleAddButtonClick() {
-    setWasSubmitted(true);
-    if (input.trim().length === 0) return;
+  async function handleAddButtonClick() {
+    try {
+      setWasSubmitted(true);
+      if (input.trim().length === 0) return;
 
-    dispatch(addTodo(input));
-    setInput('');
-    setWasSubmitted(false);
+      await dispatch(addTodo(input)).unwrap();
+      setInput('');
+      setWasSubmitted(false);
+
+      dispatch(setPage(1));
+      await dispatch(fetchTodos({ page: 1, limit, filter })).unwrap();
+    } catch (err) {
+      console.error('Add failed', err);
+    }
   }
 
   return (
@@ -41,7 +51,7 @@ function AddToDo() {
       borderColor="gray.500"
       borderRadius="md"
       p="2"
-      mb="2"
+
     >
       <FormControl isInvalid={isError}>
         <FormLabel>New ToDo</FormLabel>
@@ -50,6 +60,7 @@ function AddToDo() {
             type="text"
             value={input}
             placeholder="Write here"
+            onBlur={()=> setWasSubmitted(false)}
             onChange={handleInputChange}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {

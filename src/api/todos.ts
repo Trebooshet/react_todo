@@ -4,24 +4,21 @@ import type { FetchTodosResponse } from '../utils/Types.ts'
 const apiUrl: string = 'http://localhost:3001';
 
 export async function getTodosFromServer(
-  page?: number,
-  limit: number=1000,
-  filter?: 'active' | 'completed' | 'all'
+  page: number=1,
+  limit: number=5,
+  filter: 'active' | 'completed' | 'all' = 'all',
 ) {
   let url = `${apiUrl}/todos`;
 
   const params: string[] = [];
-  if (page !== undefined) params.push(`page=${page}`);
-  if (limit !== undefined) params.push(`limit=${limit}`);
-  if (filter !== undefined) params.push(`filter=${filter}`);
+  params.push(`page=${page}`);
+  params.push(`limit=${limit}`);
+  params.push(`filter=${filter}`);
 
-  if (params.length > 0) {
-    url += `?${params.join('&')}`;
-  }
+  url += `?${params.join('&')}`;
 
   const response = await axios.get<FetchTodosResponse>(url);
   console.log(response.data);
-  console.log(response.data.data);
   return response.data;
 }
 

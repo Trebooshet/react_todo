@@ -1,11 +1,12 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import { getTodosFromServer, createTodo, deleteTodo, updateTodo, toggleTodo }from "../api/todos.ts";
-import type { ToDoItemType, FetchTodosResponse } from '../utils/Types.ts'
+import type { ToDoItemType, FetchTodosResponse, Filter } from '../utils/Types.ts'
 
-export const fetchTodos = createAsyncThunk<FetchTodosResponse>(
+export const fetchTodos = createAsyncThunk<FetchTodosResponse,
+  { page: number; limit: number; filter: Filter }>(
   "todos/fetchTodos",
-  async () => {
-    return await getTodosFromServer();
+  async ({page, limit, filter}) => {
+    return await getTodosFromServer(page, limit, filter);
   }
 );
 
@@ -20,7 +21,7 @@ export const removeTodo = createAsyncThunk(
   "todos/removeTodo",
   async (id: number) => {
     await deleteTodo(id);
-    return id; // вернём id, чтобы потом удалить из state
+    return id;
   }
 );
 
@@ -42,35 +43,61 @@ const todoSlice = createSlice({
   name: 'todos',
   initialState: {
     todos: [] as ToDoItemType[],
+    isLoading: false,
+    page: 1,
+    totalPages: 1,
+    limit: 5,
+    totalItems: 0,
+    filter: 'all' as Filter,
   },
   reducers: {
-
+    setPage:(state, action) => {
+      state.page = action.payload;
+    },
+    setLimit: (state, action) => {
+      state.limit = action.payload
+      state.page = 1
+    },
+    setFilter: (state, action) => {
+      state.filter = action.payload
+      state.page = 1
+    }
   },
     extraReducers: (builder) => {
       builder
+        .addCase(fetchTodos.pending, (state)=>{
+          state.isLoading = true;
+        })
         .addCase(fetchTodos.fulfilled, (state, action) => {
           state.todos = Array.isArray(action.payload.data) ? action.payload.data : [];
+          state.totalItems = action.payload.total;
+          state.totalPages = action.payload.totalPages;
+          state.page = action.payload.page
+          state.limit = action.payload.limit
+          state.isLoading = false;
+        })
+        .addCase(fetchTodos.rejected, (state) => {
+          state.isLoading = false;
         })
         .addCase(addTodo.fulfilled, (state, action) => {
           state.todos.push(action.payload);
+          state.totalItems++
         })
         .addCase(removeTodo.fulfilled, (state, action) =>{
           state.todos = state.todos.filter(i => i.id !== action.payload)
+          state.totalItems--
         })
         .addCase(editTodo.fulfilled, (state, action) => {
           const index = state.todos.findIndex(todo => todo.id === action.payload.id);
-          if (index !== -1) {
             state.todos[index] = action.payload;
-          }
         })
         .addCase(toggleTodoItem.fulfilled, (state, action) => {
           const index = state.todos.findIndex(todo => todo.id === action.payload.id);
-          if (index !== -1) {
             state.todos[index] = action.payload;
-          }
         });
     },
 })
 
+export const {setPage, setLimit, setFilter} = todoSlice.actions
 
 export default todoSlice.reducer
