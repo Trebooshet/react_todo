@@ -25,12 +25,11 @@ export default function ToDoItem({
       await dispatch(removeTodo(id)).unwrap();
       const res = await dispatch(fetchTodos({ page, limit, filter })).unwrap();
 
-      if ((res.data.length === 0 || page > res.totalPages) && page > 1) {
+      if ((res.data.length === 0 ) && page > 1) {
         const newPage = Math.max(1, page - 1);
         dispatch(setPage(newPage));
         await dispatch(fetchTodos({ page: newPage, limit, filter })).unwrap();
       }
-
     } catch (err) {
       console.error('Delete failed', err);
     }
@@ -40,7 +39,6 @@ export default function ToDoItem({
     try {
       await dispatch(editTodo({id, text})).unwrap()
       setEditedId(null)
-      // await dispatch(fetchTodos({ page, limit, filter })).unwrap();
     } catch (err) {
       console.log('Edit error', err);
     }
