@@ -2,20 +2,8 @@
   {
     "id": 1756576808159,
     "text": "rrw",
-    "completed": false,
+    "completed": true,
     "createdAt": "2025-08-30T18:00:08.159Z"
-  },
-  {
-    "id": 1756576005782,
-    "text": "в",
-    "completed": true,
-    "createdAt": "2025-08-30T17:46:45.782Z"
-  },
-  {
-    "id": 1756576005578,
-    "text": "ц",
-    "completed": true,
-    "createdAt": "2025-08-30T17:46:45.578Z"
   },
   {
     "id": 1756576005299,
@@ -25,7 +13,7 @@
   },
   {
     "id": 1756576005062,
-    "text": "вцвц\\ц",
+    "text": "вцвц\\цrfrfr",
     "completed": false,
     "createdAt": "2025-08-30T17:46:45.062Z"
   },
