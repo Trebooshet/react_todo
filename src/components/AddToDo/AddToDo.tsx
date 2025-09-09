@@ -1,36 +1,36 @@
 import {
-  Input,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
   Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   HStack,
+  Input,
   VStack,
-} from '@chakra-ui/react';
-import { useState } from 'react';
+} from '@chakra-ui/react'
+import { useState } from 'react'
 
-type AddToDoProps = {
-  addToDoItem: (text: string) => void;
-};
+import { addTodo } from '@/store/todoSlice.ts'
+import { useAppDispatch } from '@/utils/hooks.ts'
 
-function AddToDo({ addToDoItem }: AddToDoProps) {
-  const [input, setInput] = useState('');
-  const [wasSubmitted, setWasSubmitted] = useState(false);
+function AddToDo() {
+  const [input, setInput] = useState('')
+  const [wasSubmitted, setWasSubmitted] = useState(false)
+  const dispatch = useAppDispatch()
 
-  const isError = input.trim().length === 0 && wasSubmitted;
+  const isError = input.trim().length === 0 && wasSubmitted
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setWasSubmitted(false);
-    setInput(e.target.value);
+    setWasSubmitted(false)
+    setInput(e.target.value)
   }
 
   function handleAddButtonClick() {
-    setWasSubmitted(true);
-    if (input.trim().length === 0) return;
+    setWasSubmitted(true)
+    if (input.trim().length === 0) return
 
-    addToDoItem(input.trim()); // вызываем функцию из App.tsx
-    setInput('');
-    setWasSubmitted(false);
+    dispatch(addTodo(input))
+    setInput('')
+    setWasSubmitted(false)
   }
 
   return (
@@ -54,7 +54,7 @@ function AddToDo({ addToDoItem }: AddToDoProps) {
             onChange={handleInputChange}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                handleAddButtonClick();
+                handleAddButtonClick()
               }
             }}
             minH="50"
@@ -66,7 +66,7 @@ function AddToDo({ addToDoItem }: AddToDoProps) {
         )}
       </FormControl>
     </VStack>
-  );
+  )
 }
 
-export default AddToDo;
+export default AddToDo

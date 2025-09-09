@@ -1,23 +1,70 @@
-import { HStack, Text, IconButton, Image, Input } from '@chakra-ui/react';
-import { RiDeleteBin6Line, RiEdit2Line } from 'react-icons/ri';
-import type { ToDoItemProps } from '../../utils/Types.ts';
-import { useRef } from 'react';
-import checkMark from '../../assets/foni-papik-pro-dddc-p-kartinki-zelenaya-galochka-na-prozrachnom-3.png';
+import { HStack, IconButton, Image, Input, Text } from '@chakra-ui/react'
+import { useRef } from 'react'
+import { RiDeleteBin6Line, RiEdit2Line } from 'react-icons/ri'
 
+import { editTodo, removeTodo, toggleTodoItem } from '@/store/todoSlice.ts'
+import { useAppDispatch } from '@/utils/hooks.ts'
+import type {
+  BlurEvent,
+  ClickEvent,
+  KeyEvent,
+  ToDoItemProps,
+} from '@/utils/Types.ts'
+
+import checkMark from '../../assets/foni-papik-pro-dddc-p-kartinki-zelenaya-galochka-na-prozrachnom-3.png'
 
 export default function ToDoItem({
   item,
   editedId,
+  setEditedId,
   editedText,
   setEditedText,
-  handleEdit,
-  handleSaveEdited,
-  handleDeleteTodo,
-  handleToggleTodo,
-  // handleUpdateTodo,
 }: ToDoItemProps) {
+  const dispatch = useAppDispatch()
+  const editButtonRef = useRef<HTMLButtonElement>(null)
 
-  const editButtonRef = useRef<HTMLButtonElement>(null);
+  const handleToggle = () => {
+    if (!editedId) {
+      dispatch(toggleTodoItem(item.id))
+    }
+  }
+
+  const handleDelete = (e: ClickEvent) => {
+    e.stopPropagation()
+    dispatch(removeTodo(item.id))
+  }
+
+  const handleSaveEdit = () => {
+    if (editedId && editedText) {
+      dispatch(editTodo({ id: editedId, text: editedText }))
+      setEditedId(null)
+    }
+  }
+
+  const handleKeyDown = (e: KeyEvent) => {
+    if (e.key === 'Enter') {
+      handleSaveEdit()
+    }
+  }
+
+  const handleBlur = (e: BlurEvent) => {
+    if (e.relatedTarget === editButtonRef.current) return
+    handleSaveEdit()
+  }
+
+  const handleEditButtonClick = (e: ClickEvent) => {
+    e.stopPropagation()
+    if (item.id === editedId) {
+      dispatch(editTodo({ id: editedId!, text: editedText }))
+      setEditedId(null)
+    } else {
+      if (item.completed) {
+        dispatch(toggleTodoItem(item.id))
+      }
+      setEditedId(item.id)
+      setEditedText(item.text)
+    }
+  }
 
   return (
     <HStack
@@ -27,7 +74,7 @@ export default function ToDoItem({
       p="2"
       w="full"
       justify="space-between"
-      onClick={() => !editedId && handleToggleTodo(item.id)}
+      onClick={handleToggle}
       bgGradient={
         item.completed ? 'linear(to-r, green.500, green.900)' : 'transparent'
       }
@@ -37,23 +84,12 @@ export default function ToDoItem({
           value={editedText ?? ''}
           flex="1"
           onChange={(e) => setEditedText(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSaveEdited()}
-          onBlur={
-            (e) => {
-             if (e.relatedTarget === editButtonRef.current) {
-               return
-             }
-             handleSaveEdited()
-           }
-          }
-
+          onKeyDown={handleKeyDown}
+          onBlur={handleBlur}
           autoFocus
         />
       ) : (
-        <Text
-          flex="1"
-          wordBreak="break-word"
-        >
+        <Text flex="1" wordBreak="break-word">
           {item.text}
         </Text>
       )}
@@ -72,28 +108,15 @@ export default function ToDoItem({
           ref={editButtonRef}
           rounded="full"
           icon={<RiEdit2Line />}
-          onClick={(e) => {
-            e.stopPropagation();
-            if (item.id === editedId) {
-              handleSaveEdited();
-            } else {
-              if (item.completed) {
-                handleToggleTodo(item.id);
-              }
-              handleEdit(item.id, item.text);
-            }
-          }}
+          onClick={handleEditButtonClick}
         />
         <IconButton
           aria-label="delete To Do"
           rounded="full"
           icon={<RiDeleteBin6Line />}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteTodo(item.id);
-          }}
+          onClick={handleDelete}
         />
       </HStack>
     </HStack>
-  );
+  )
 }
