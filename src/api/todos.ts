@@ -4,8 +4,8 @@ import type { FetchTodosResponse } from '../utils/Types.ts'
 const apiUrl: string = 'http://localhost:3001';
 
 export async function getTodosFromServer(
-  page: number=1,
-  limit: number=5,
+  page: number = 1,
+  limit: number = 5,
   filter: 'active' | 'completed' | 'all' = 'all',
 ) {
   let url = `${apiUrl}/todos`;

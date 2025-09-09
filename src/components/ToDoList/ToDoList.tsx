@@ -10,7 +10,7 @@ import {fetchTodos, setPage, setLimit, setFilter} from "../../store/todoSlice.ts
 function ToDoList() {
   const dispatch = useAppDispatch();
   const [editedId, setEditedId] = useState<number | null>(null);
-  const [editedText, setEditedText] = useState<string | null>(null);
+  const [editedText, setEditedText] = useState<string >('');
 
   const todos = useAppSelector(state => state.todos.todos);
   const totalItems = useAppSelector(state => state.todos.totalItems)

@@ -27,8 +27,9 @@ export const removeTodo = createAsyncThunk(
 
 export const editTodo = createAsyncThunk(
   "todos/editTodo",
-  async ({ id, text }: { id: number; text: string | null}) => {
-    return  await updateTodo(id, text)
+  async ({ id, text }: { id: number; text: string }) => {
+    const inputUpperFirst = text.slice(0,1).toUpperCase()+ text.slice(1)
+    return  await updateTodo(id, inputUpperFirst)
   }
 )
 

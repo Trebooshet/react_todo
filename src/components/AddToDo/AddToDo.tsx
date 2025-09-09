@@ -31,7 +31,9 @@ function AddToDo() {
       setWasSubmitted(true);
       if (input.trim().length === 0) return;
 
-      await dispatch(addTodo(input)).unwrap();
+      const inputUpperFirst = input.slice(0,1).toUpperCase()+ input.slice(1)
+
+      await dispatch(addTodo(inputUpperFirst)).unwrap();
       setInput('');
       setWasSubmitted(false);
 

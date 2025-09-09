@@ -19,7 +19,7 @@ export type ToDoItemProps = {
   item: ToDoItemType;
   editedId: number | null;
   setEditedId: (id: number | null) => void;
-  editedText: string | null;
+  editedText: string;
   setEditedText: (text: string) => void;
 };
 

@@ -35,7 +35,8 @@ export default function ToDoItem({
     }
   };
 
-  const handleEditTodo = async (id:number, text: string | null) => {
+  const handleEditTodo = async (id:number, text: string) => {
+
     try {
       await dispatch(editTodo({id, text})).unwrap()
       setEditedId(null)
@@ -73,8 +74,6 @@ export default function ToDoItem({
           onKeyDown={async (e) => {
             if (e.key === 'Enter') {
               await handleEditTodo(editedId,  editedText )
-              // dispatch(editTodo({ id: editedId!,  text: editedText }));
-              // setEditedId(null)
             }
           }}
           onBlur={async (e) => {
