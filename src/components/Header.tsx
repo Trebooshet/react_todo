@@ -1,5 +1,5 @@
-import { VStack, Heading, IconButton, useColorMode } from '@chakra-ui/react';
 import { GoMoon, GoSun } from 'react-icons/go';
+import { Heading, IconButton, useColorMode,VStack } from '@chakra-ui/react';
 
 export default function Header() {
   const { colorMode, toggleColorMode } = useColorMode();

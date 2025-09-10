@@ -1,5 +1,6 @@
 import ReactPaginate from "react-paginate";
 import { Box } from "@chakra-ui/react";
+
 import './Pagination.css'
 
 export default function Pagination({ pageCount, setPage, currentPage }: { pageCount: number; setPage: (newPage: number) => void, currentPage: number }) {
