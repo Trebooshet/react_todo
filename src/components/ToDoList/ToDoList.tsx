@@ -1,21 +1,12 @@
 import { useEffect, useState } from 'react'
-import {
-  Badge,
-  Box,
-  Button,
-  HStack,
-  Image,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Badge, Box, HStack, Image, Text, VStack } from '@chakra-ui/react'
 
 import photoOfMe from '@/assets/Photoroom_20250723_235615.png'
-import { fetchTodos, setFilter, setLimit, setPage } from '@/store/todoSlice.ts'
-import { useAppDispatch, useAppSelector } from '@/utils/hooks.ts'
-import type { ToDoItemType } from '@/utils/Types.ts'
-
 import Pagination from '@/components/Pagination/Pagination.tsx'
 import ToDoItem from '@/components/ToDoItem/ToDoItem.tsx'
+import { fetchTodos, setPage } from '@/store/todoSlice.ts'
+import { useAppDispatch, useAppSelector } from '@/utils/hooks.ts'
+import type { ToDoItemType } from '@/utils/Types.ts'
 
 function ToDoList() {
   const dispatch = useAppDispatch()
@@ -36,21 +27,8 @@ function ToDoList() {
   if (todos.length === 0) {
     return (
       <VStack>
-        <Image
-          boxSize="250px"
-          objectFit="cover"
-          src={photoOfMe}
-          mt="4"
-          ml="4"
-          mb="-2"
-        />
-        <Badge
-          variant="subtle"
-          colorScheme="green"
-          fontSize="lg"
-          borderRadius="lg"
-          p={2}
-        >
+        <Image boxSize="250px" objectFit="cover" src={photoOfMe} mt="4" ml="4" mb="-2" />
+        <Badge variant="subtle" colorScheme="green" fontSize="lg" borderRadius="lg" p={2}>
           You have no any ToDos. Take a rest
         </Badge>
       </VStack>
@@ -58,39 +36,8 @@ function ToDoList() {
   }
 
   return (
-    <Box position="relative">
-      <VStack
-        position="relative"
-        w={{ base: '90%', sm: '80%', md: '70%', lg: '60%' }}
-        mx="auto"
-      >
-        {totalItems > 2 && (
-          <VStack alignItems={'start'} position="absolute" right="-125px">
-            <Button onClick={() => dispatch(setFilter('all'))}>All</Button>
-            <Button onClick={() => dispatch(setFilter('active'))}>
-              Active
-            </Button>
-            <Button onClick={() => dispatch(setFilter('completed'))}>
-              Completed
-            </Button>
-          </VStack>
-        )}
-        {totalItems > 5 && (
-          <VStack alignItems={'end'} position="absolute" left="-112px">
-            <VStack alignItems={'end'}>
-              <Button w={14} onClick={() => dispatch(setLimit(5))}>
-                5
-              </Button>
-              <Button w={14} onClick={() => dispatch(setLimit(10))}>
-                10
-              </Button>
-              <Button w={14} onClick={() => dispatch(setLimit(20))}>
-                20
-              </Button>
-            </VStack>
-            <Text>Items on page</Text>
-          </VStack>
-        )}
+    <Box position="relative" w="100%">
+      <VStack position="relative" w="100%">
         {todos.map((toDoItem: ToDoItemType) => (
           <ToDoItem
             key={toDoItem.id}
@@ -102,11 +49,7 @@ function ToDoList() {
           />
         ))}
         <HStack>
-          <Pagination
-            pageCount={totalPages}
-            setPage={(newPage) => dispatch(setPage(newPage))}
-            currentPage={page}
-          />
+          <Pagination pageCount={totalPages} setPage={(newPage) => dispatch(setPage(newPage))} currentPage={page} />
           <Text border={'1px solid green'} p={1.5} rounded="50">
             {totalItems} Todos
           </Text>

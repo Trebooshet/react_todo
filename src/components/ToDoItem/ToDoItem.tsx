@@ -1,33 +1,19 @@
 import { useRef } from 'react'
 import { RiDeleteBin6Line, RiEdit2Line } from 'react-icons/ri'
-import { HStack, IconButton, Image, Input, Text } from '@chakra-ui/react'
+import { Box,HStack, IconButton, Image, Input, Text, VStack } from '@chakra-ui/react'
 
 import checkMark from '@/assets/foni-papik-pro-dddc-p-kartinki-zelenaya-galochka-na-prozrachnom-3.png'
-import {
-  editTodo,
-  fetchTodos,
-  removeTodo,
-  setPage,
-  toggleTodoItem,
-} from '@/store/todoSlice.ts'
+import { editTodo, fetchTodos, removeTodo, setPage, toggleTodoItem } from '@/store/todoSlice.ts'
 import { useAppDispatch, useAppSelector } from '@/utils/hooks.ts'
-import type {
-  BlurEvent,
-  ClickEvent,
-  KeyEvent,
-  ToDoItemProps,
-} from '@/utils/Types.ts'
+import type { BlurEvent, ClickEvent, KeyEvent, ToDoItemProps } from '@/utils/Types.ts'
 
-export default function ToDoItem({
-  item,
-  editedId,
-  setEditedId,
-  editedText,
-  setEditedText,
-}: ToDoItemProps) {
+export default function ToDoItem({ item, editedId, setEditedId, editedText, setEditedText }: ToDoItemProps) {
   const dispatch = useAppDispatch()
   const editButtonRef = useRef<HTMLButtonElement>(null)
   const { page, limit, filter } = useAppSelector((s) => s.todos)
+
+  const date = new Date(item.createdAt).toLocaleDateString()
+  const time = new Date(item.createdAt).toLocaleTimeString()
 
   const handleDelete = async (id: number) => {
     try {
@@ -104,12 +90,10 @@ export default function ToDoItem({
       borderColor="gray.500"
       borderRadius="md"
       p="2"
-      w="full"
+      w="100%"
       justify="space-between"
       onClick={() => handleToggle(item.id)}
-      bgGradient={
-        item.completed ? 'linear(to-r, green.500, green.900)' : 'transparent'
-      }
+      bgGradient={item.completed ? 'linear(to-r, green.500, green.900)' : 'linear(to-r, teal.500,teal.700, #1A202C)'}
     >
       {item.id === editedId ? (
         <Input
@@ -121,20 +105,21 @@ export default function ToDoItem({
           autoFocus
         />
       ) : (
-        <Text flex="1" wordBreak="break-word">
-          {item.text}
-        </Text>
+        <HStack justify="space-between" w="100%">
+          <Text flex="1" wordBreak="break-word">
+            {item.text}
+          </Text>
+          <VStack alignItems={'end'}>
+            <Text color={'orange.100'}>{date}</Text>
+            <Text color={'orange.100'}>{time}</Text>
+          </VStack>
+        </HStack>
       )}
 
       <HStack>
-        {item.completed && (
-          <Image
-            boxSize="36px"
-            rounded="full"
-            objectFit="cover"
-            src={checkMark}
-          />
-        )}
+        <Box boxSize="36px">
+          {item.completed && <Image boxSize="36px" rounded="full" objectFit="cover" src={checkMark} />}
+        </Box>
         <IconButton
           aria-label="edit To Do"
           ref={editButtonRef}
