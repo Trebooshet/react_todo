@@ -1,35 +1,39 @@
-import ToDoItem from '../ToDoItem/ToDoItem';
-import { Box, VStack, Image, Badge, Button } from '@chakra-ui/react';
-import type { ToDoItemType, ToDoListProps } from '../../utils/Types.ts';
-import photoOfMe from '../../assets/Photoroom_20250723_235615.png';
+import { useEffect, useState } from 'react'
+import {
+  Badge,
+  Box,
+  Button,
+  HStack,
+  Image,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 
-function ToDoList({
-  todos = [],
-  sortOrder,
-  setSortOrder,
-  handleEdit,
-  handleDeleteTodo,
-  handleToggleTodo,
-  handleSaveEdited,
-  editedId,
-  editedText,
-  setEditedText,
-}: ToDoListProps) {
-  const sortedToDoItems = (): ToDoItemType[] => {
-    let filtered = todos;
+import photoOfMe from '@/assets/Photoroom_20250723_235615.png'
+import { fetchTodos, setFilter, setLimit, setPage } from '@/store/todoSlice.ts'
+import { useAppDispatch, useAppSelector } from '@/utils/hooks.ts'
+import type { ToDoItemType } from '@/utils/Types.ts'
 
-    if (sortOrder === 'active') {
-      filtered = todos.filter((i) => !i.completed);
-    } else if (sortOrder === 'completed') {
-      filtered = todos.filter((i) => i.completed);
-    }
+import Pagination from '@/components/Pagination/Pagination.tsx'
+import ToDoItem from '@/components/ToDoItem/ToDoItem.tsx'
 
-    return [...filtered].sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-  };
-  if (sortedToDoItems().length === 0) {
+function ToDoList() {
+  const dispatch = useAppDispatch()
+  const [editedId, setEditedId] = useState<number | null>(null)
+  const [editedText, setEditedText] = useState<string>('')
+
+  const todos = useAppSelector((state) => state.todos.todos)
+  const totalItems = useAppSelector((state) => state.todos.totalItems)
+  const totalPages = useAppSelector((state) => state.todos.totalPages)
+  const page = useAppSelector((state) => state.todos.page)
+  const limit = useAppSelector((state) => state.todos.limit)
+  const filter = useAppSelector((state) => state.todos.filter)
+
+  useEffect(() => {
+    dispatch(fetchTodos({ page, limit, filter }))
+  }, [dispatch, page, limit, filter])
+
+  if (todos.length === 0) {
     return (
       <VStack>
         <Image
@@ -50,43 +54,66 @@ function ToDoList({
           You have no any ToDos. Take a rest
         </Badge>
       </VStack>
-    );
+    )
   }
 
   return (
-    <Box>
+    <Box position="relative">
       <VStack
         position="relative"
         w={{ base: '90%', sm: '80%', md: '70%', lg: '60%' }}
         mx="auto"
       >
-        {todos.length > 2 && (
-          <VStack
-            position="absolute"
-            right="-150px"
-          >
-            <Button onClick={() => setSortOrder('all')}>All</Button>
-            <Button onClick={() => setSortOrder('active')}>Active</Button>
-            <Button onClick={() => setSortOrder('completed')}>Completed</Button>
+        {totalItems > 2 && (
+          <VStack alignItems={'start'} position="absolute" right="-125px">
+            <Button onClick={() => dispatch(setFilter('all'))}>All</Button>
+            <Button onClick={() => dispatch(setFilter('active'))}>
+              Active
+            </Button>
+            <Button onClick={() => dispatch(setFilter('completed'))}>
+              Completed
+            </Button>
           </VStack>
         )}
-        {sortedToDoItems().map((toDoItem: ToDoItemType) => (
+        {totalItems > 5 && (
+          <VStack alignItems={'end'} position="absolute" left="-112px">
+            <VStack alignItems={'end'}>
+              <Button w={14} onClick={() => dispatch(setLimit(5))}>
+                5
+              </Button>
+              <Button w={14} onClick={() => dispatch(setLimit(10))}>
+                10
+              </Button>
+              <Button w={14} onClick={() => dispatch(setLimit(20))}>
+                20
+              </Button>
+            </VStack>
+            <Text>Items on page</Text>
+          </VStack>
+        )}
+        {todos.map((toDoItem: ToDoItemType) => (
           <ToDoItem
             key={toDoItem.id}
             item={toDoItem}
             editedId={editedId}
+            setEditedId={setEditedId}
             editedText={editedText}
             setEditedText={setEditedText}
-            handleEdit={handleEdit}
-            handleSaveEdited={handleSaveEdited}
-            // handleUpdateTodo={handleUpdateTodo}
-            handleDeleteTodo={handleDeleteTodo}
-            handleToggleTodo={handleToggleTodo}
           />
         ))}
+        <HStack>
+          <Pagination
+            pageCount={totalPages}
+            setPage={(newPage) => dispatch(setPage(newPage))}
+            currentPage={page}
+          />
+          <Text border={'1px solid green'} p={1.5} rounded="50">
+            {totalItems} Todos
+          </Text>
+        </HStack>
       </VStack>
     </Box>
-  );
+  )
 }
 
-export default ToDoList;
+export default ToDoList

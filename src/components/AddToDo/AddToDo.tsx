@@ -1,36 +1,47 @@
+import { useState } from 'react'
 import {
-  Input,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
   Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   HStack,
+  Input,
   VStack,
-} from '@chakra-ui/react';
-import { useState } from 'react';
+} from '@chakra-ui/react'
 
-type AddToDoProps = {
-  addToDoItem: (text: string) => void;
-};
+import { addTodo, fetchTodos } from '@/store/todoSlice.ts'
+import { setPage } from '@/store/todoSlice.ts'
+import { useAppDispatch, useAppSelector } from '@/utils/hooks.ts'
 
-function AddToDo({ addToDoItem }: AddToDoProps) {
-  const [input, setInput] = useState('');
-  const [wasSubmitted, setWasSubmitted] = useState(false);
-
-  const isError = input.trim().length === 0 && wasSubmitted;
+function AddToDo() {
+  const [input, setInput] = useState('')
+  const [wasSubmitted, setWasSubmitted] = useState(false)
+  const dispatch = useAppDispatch()
+  const isError = input.trim().length === 0 && wasSubmitted
+  const limit = useAppSelector((state) => state.todos.limit)
+  const filter = useAppSelector((state) => state.todos.filter)
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setWasSubmitted(false);
-    setInput(e.target.value);
+    setWasSubmitted(false)
+    setInput(e.target.value)
   }
 
-  function handleAddButtonClick() {
-    setWasSubmitted(true);
-    if (input.trim().length === 0) return;
+  async function handleAddButtonClick() {
+    try {
+      setWasSubmitted(true)
+      if (input.trim().length === 0) return
 
-    addToDoItem(input.trim()); // вызываем функцию из App.tsx
-    setInput('');
-    setWasSubmitted(false);
+      const inputUpperFirst = input.slice(0, 1).toUpperCase() + input.slice(1)
+
+      await dispatch(addTodo(inputUpperFirst)).unwrap()
+      setInput('')
+      setWasSubmitted(false)
+
+      dispatch(setPage(1))
+      await dispatch(fetchTodos({ page: 1, limit, filter })).unwrap()
+    } catch (err) {
+      console.error('Add failed', err)
+    }
   }
 
   return (
@@ -42,7 +53,6 @@ function AddToDo({ addToDoItem }: AddToDoProps) {
       borderColor="gray.500"
       borderRadius="md"
       p="2"
-      mb="2"
     >
       <FormControl isInvalid={isError}>
         <FormLabel>New ToDo</FormLabel>
@@ -51,10 +61,11 @@ function AddToDo({ addToDoItem }: AddToDoProps) {
             type="text"
             value={input}
             placeholder="Write here"
+            onBlur={() => setWasSubmitted(false)}
             onChange={handleInputChange}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                handleAddButtonClick();
+                handleAddButtonClick()
               }
             }}
             minH="50"
@@ -66,7 +77,7 @@ function AddToDo({ addToDoItem }: AddToDoProps) {
         )}
       </FormControl>
     </VStack>
-  );
+  )
 }
 
-export default AddToDo;
+export default AddToDo

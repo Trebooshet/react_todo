@@ -1,0 +1,22 @@
+.pagination {
+  display: flex;
+  list-style: none;
+  gap: 8px;
+  justify-content: center;
+  padding: 0;
+  user-select: none;
+}
+
+.pagination li {
+  border: 1px solid gray;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  user-select: none;
+}
+
+.pagination li.selected {
+  color: white;
+  border-color: #38a169;
+  user-select: none;
+}
