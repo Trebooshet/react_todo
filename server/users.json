@@ -1,0 +1,128 @@
+[
+  {
+    "id": 1758282063536,
+    "email": "123@mail.com",
+    "password": "$2a$10$m6dDZWBCGgRHzr37R.gGAuFifn.upRrxX3ToRNTE5ejdMNU42e9nC",
+    "age": null,
+    "createdAt": "2025-09-19T11:41:03.536Z"
+  },
+  {
+    "id": 1758288236781,
+    "email": "123",
+    "password": "$2a$10$JdhOaIn9ZVkKaAX.eyZeNuaXnZ2xfCIxmZ2ZC87Zvn.mqgzmoLINC",
+    "age": null,
+    "createdAt": "2025-09-19T13:23:56.781Z"
+  },
+  {
+    "id": 1758359933560,
+    "email": "234",
+    "password": "$2a$10$syuxcbvc7a6EvVgC8g4p6uF94YSzccYyCVCZQHa9kfbUDwro.NT5m",
+    "age": null,
+    "createdAt": "2025-09-20T09:18:53.560Z"
+  },
+  {
+    "id": 1758360381781,
+    "email": "1",
+    "password": "$2a$10$cv/w2.zJXPvnNp6opn9c3OTWtObiqXTJZgfyJhtUljQjOMRYSWWIu",
+    "age": 12,
+    "createdAt": "2025-09-20T09:26:21.781Z"
+  },
+  {
+    "id": 1758360428027,
+    "email": "2345",
+    "password": "$2a$10$s1n2yN726TmRbM5.fPDy8OJ5x2BN8pXBYolHpYjTl/2Ufv2XUZpR.",
+    "age": 37,
+    "createdAt": "2025-09-20T09:27:08.027Z"
+  },
+  {
+    "id": 1758611122816,
+    "email": "2",
+    "password": "$2a$10$Eurq6CMB4VAMgRuAkjijpeVZs3fDGA5t44YUSH/PDpVLJhZjbI.c.",
+    "age": null,
+    "createdAt": "2025-09-23T07:05:22.816Z"
+  },
+  {
+    "id": 1758616106670,
+    "email": "11@1222.yu",
+    "password": "$2a$10$HXckH8ZsChl7b/RfvabsW.WLOVggJzWZZ.flddZMnvu.fIapnnG3W",
+    "age": null,
+    "createdAt": "2025-09-23T08:28:26.670Z"
+  },
+  {
+    "id": 1758616282101,
+    "email": "test@mail.ru",
+    "password": "$2a$10$lGjWWiHTll3gOy4IqLcfhuApslLUIYDp0.Ub3ZpE5XH0ZMtqwyKiu",
+    "age": 32,
+    "createdAt": "2025-09-23T08:31:22.101Z"
+  },
+  {
+    "id": 1758616330812,
+    "email": "11@11.11",
+    "password": "$2a$10$OlLoQCc7ItwxGCqpzEIUAeyo3ZGBb6iC3r9Ncc1nxCtln/WpW8ohi",
+    "age": null,
+    "createdAt": "2025-09-23T08:32:10.812Z"
+  },
+  {
+    "id": 1758616474972,
+    "email": "11@11.111",
+    "password": "$2a$10$kQmjaLCgeH4m.Vf4J3jpVuoGE2OFgZg1yhyML0A/ffTo1bOHRAaxG",
+    "age": null,
+    "createdAt": "2025-09-23T08:34:34.972Z"
+  },
+  {
+    "id": 1758632302479,
+    "email": "1@1.1",
+    "password": "$2a$10$VMZg3EAP5MSe1hho5G6t3ut0cxMpYeNxNejOVA9c4Dodjjhp3uw.a",
+    "age": null,
+    "createdAt": "2025-09-23T12:58:22.479Z"
+  },
+  {
+    "id": 1758632428662,
+    "email": "11@22.33",
+    "password": "$2a$10$vMbE5ya2XpfoLP36QJhScODgKrXEfXEi8BK8x/Y3NaIXxZJIFfhRe",
+    "age": null,
+    "createdAt": "2025-09-23T13:00:28.662Z"
+  },
+  {
+    "id": 1758632493108,
+    "email": "11@33.11",
+    "password": "$2a$10$NZmVwWKHKdIxPh92M8shDO4baZdmzRxoavXLnrucN6pdPH9xQc9vK",
+    "age": null,
+    "createdAt": "2025-09-23T13:01:33.108Z"
+  },
+  {
+    "id": 1758632630628,
+    "email": "22@11.44",
+    "password": "$2a$10$ifPpPdxL6NyPGf6a74ZloejXSgatfU.Gj8o2mCsu7M3UFyWE/IBXW",
+    "age": null,
+    "createdAt": "2025-09-23T13:03:50.628Z"
+  },
+  {
+    "id": 1758632770141,
+    "email": "22@22.23456789",
+    "password": "$2a$10$88g.abACOI6RDsGGbcg98eM1fLAahYXR7p21p8KN9vS0L73AjPOkm",
+    "age": null,
+    "createdAt": "2025-09-23T13:06:10.141Z"
+  },
+  {
+    "id": 1758632976779,
+    "email": "44@11.11",
+    "password": "$2a$10$wgVK0wWMY7Pg5u5gMG.EeuVj/PzLLJOFIMxI5fDZDcScuyD2CKzN2",
+    "age": null,
+    "createdAt": "2025-09-23T13:09:36.779Z"
+  },
+  {
+    "id": 1758714966694,
+    "email": "11111@11111.11",
+    "password": "$2a$10$yATqKrf.3x3NTxvFtquLxe9ENpRyg4vqRwkZqQb6E8ssfobOUTtdC",
+    "age": null,
+    "createdAt": "2025-09-24T11:56:06.694Z"
+  },
+  {
+    "id": 1758723805766,
+    "email": "121312@dfdfd.ru",
+    "password": "$2a$10$0py/QXtXbUasKXOQRQ4VRug/hjOXE4hvP1jq1rHTQLhjCjnIiPfA2",
+    "age": null,
+    "createdAt": "2025-09-24T14:23:25.766Z"
+  }
+]

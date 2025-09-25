@@ -1,4 +1,4 @@
-import { useEffect,useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export const Clock = () => {
   const [time, setTime] = useState(new Date())
@@ -7,7 +7,7 @@ export const Clock = () => {
     setInterval(() => {
       setTime(new Date())
     }, 1000)
-  }, [time])
+  }, [])
   return (
     <>
       <div> {time.toLocaleDateString()}</div>

@@ -5,6 +5,20 @@ export type ToDoItemType = {
   createdAt: string
 }
 
+export type User = {
+  id: number
+  email: string
+  age?: number
+  createdAt?: Date
+} | null
+
+export interface AuthState {
+  user: User
+  token: string | null
+  status: 'idle' | 'loading' | 'failed'
+  isLoggedIn: boolean
+}
+
 export type Filter = 'active' | 'completed' | 'all'
 
 export type ClickEvent = React.MouseEvent<HTMLButtonElement>

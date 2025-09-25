@@ -4,6 +4,7 @@ import { Badge, Box, HStack, Image, Text, VStack } from '@chakra-ui/react'
 import photoOfMe from '@/assets/Photoroom_20250723_235615.png'
 import Pagination from '@/components/Pagination/Pagination.tsx'
 import ToDoItem from '@/components/ToDoItem/ToDoItem.tsx'
+import type { RootState } from '@/store'
 import { fetchTodos, setPage } from '@/store/todoSlice.ts'
 import { useAppDispatch, useAppSelector } from '@/utils/hooks.ts'
 import type { ToDoItemType } from '@/utils/Types.ts'
@@ -12,6 +13,7 @@ function ToDoList() {
   const dispatch = useAppDispatch()
   const [editedId, setEditedId] = useState<number | null>(null)
   const [editedText, setEditedText] = useState<string>('')
+  const token = useAppSelector((state: RootState) => state.auth.token)
 
   const todos = useAppSelector((state) => state.todos.todos)
   const totalItems = useAppSelector((state) => state.todos.totalItems)
@@ -19,12 +21,13 @@ function ToDoList() {
   const page = useAppSelector((state) => state.todos.page)
   const limit = useAppSelector((state) => state.todos.limit)
   const filter = useAppSelector((state) => state.todos.filter)
+  const isLoading = useAppSelector((state) => state.todos.isLoading)
 
   useEffect(() => {
     dispatch(fetchTodos({ page, limit, filter }))
-  }, [dispatch, page, limit, filter])
+  }, [dispatch, page, limit, filter, token])
 
-  if (todos.length === 0) {
+  if (!isLoading && todos.length === 0) {
     return (
       <VStack>
         <Image boxSize="250px" objectFit="cover" src={photoOfMe} mt="4" ml="4" mb="-2" />

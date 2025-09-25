@@ -57,7 +57,6 @@ function AddToDo() {
             type="text"
             value={input}
             placeholder="Write here"
-            borderColor={'grey.400'}
             autoComplete="off"
             onBlur={() => setWasSubmitted(false)}
             onChange={handleInputChange}
