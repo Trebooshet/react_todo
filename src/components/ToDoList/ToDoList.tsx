@@ -51,12 +51,14 @@ function ToDoList() {
             setEditedText={setEditedText}
           />
         ))}
-        <HStack>
-          <Pagination pageCount={totalPages} setPage={(newPage) => dispatch(setPage(newPage))} currentPage={page} />
-          <Text border={'1px solid green'} p={1.5} rounded="50">
-            {totalItems} Todos
-          </Text>
-        </HStack>
+        {!isLoading && (
+          <HStack>
+            <Pagination pageCount={totalPages} setPage={(newPage) => dispatch(setPage(newPage))} currentPage={page} />
+            <Text border={'1px solid green'} p={1.5} rounded="50">
+              {totalItems} Todos
+            </Text>
+          </HStack>
+        )}
       </VStack>
     </Box>
   )

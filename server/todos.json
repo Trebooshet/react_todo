@@ -1,15 +1,8 @@
 [
   {
-    "id": 1758786540167,
-    "text": "22",
-    "completed": false,
-    "createdAt": "2025-09-25T07:49:00.167Z",
-    "userId": 1758360381781
-  },
-  {
     "id": 1758786538611,
-    "text": "2",
-    "completed": false,
+    "text": "2лд",
+    "completed": true,
     "createdAt": "2025-09-25T07:48:58.611Z",
     "userId": 1758360381781
   },
@@ -93,7 +86,7 @@
   {
     "id": 1758361205515,
     "text": "А",
-    "completed": true,
+    "completed": false,
     "createdAt": "2025-09-20T09:40:05.515Z",
     "userId": 1758360381781
   },
@@ -107,7 +100,7 @@
   {
     "id": 1758361204964,
     "text": "\\аа",
-    "completed": true,
+    "completed": false,
     "createdAt": "2025-09-20T09:40:04.964Z",
     "userId": 1758360381781
   },
@@ -198,7 +191,7 @@
   {
     "id": 1758289469852,
     "text": "12233",
-    "completed": true,
+    "completed": false,
     "createdAt": "2025-09-19T13:44:29.852Z",
     "userId": 1758288236781
   }

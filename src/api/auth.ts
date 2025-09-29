@@ -1,6 +1,4 @@
-// import axios from 'axios'
-// const url = 'http://localhost:3001'
-import { authApi, protectedApi } from '@/api/refreshInterceptor.ts'
+import { authApi, protectedApi } from '@/api/interceptors.ts'
 import { deleteCookie, setCookie } from '@/utils/cookie'
 
 export const register = async (email: string, password: string, age?: number) => {
@@ -13,7 +11,6 @@ export const register = async (email: string, password: string, age?: number) =>
     })
   ).data
   setCookie('refreshToken', refreshToken)
-  console.log(accessToken, refreshToken)
   return { accessToken, refreshToken }
 }
 
@@ -30,24 +27,16 @@ export const login = async (email: string, password: string) => {
   return { accessToken, refreshToken }
 }
 
-export const me = async (token: string | null) => {
-  const resp = await protectedApi.get(`/auth/me`, {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-  console.log(resp.data)
+export const me = async () => {
+  const resp = await protectedApi.get(`/auth/me`)
   return resp.data
 }
 
-export const changePassword = async (oldPass: string, newPass: string, token: string | null) => {
-  const resp = await protectedApi.post(
-    `/auth/change-password`,
-    {
-      oldPassword: oldPass,
-      newPassword: newPass,
-    },
-    { headers: { Authorization: `Bearer ${token}` } },
-  )
-  console.log(resp.data)
+export const changePassword = async (oldPass: string, newPass: string) => {
+  const resp = await protectedApi.post(`/auth/change-password`, {
+    oldPassword: oldPass,
+    newPassword: newPass,
+  })
   return resp.data
 }
 

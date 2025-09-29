@@ -1,51 +1,38 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { createTodo, deleteTodo, getTodosFromServer, toggleTodo, updateTodo } from '@/api/todos.ts'
-import type { AuthState,FetchTodosResponse, Filter, ToDoItemType } from '@/utils/Types.ts'
+import type { FetchTodosResponse, Filter, ToDoItemType } from '@/utils/Types.ts'
 
 export const fetchTodos = createAsyncThunk<FetchTodosResponse, { page: number; limit: number; filter: Filter }>(
   'todos/fetchTodos',
-  async ({ page, limit, filter }, { getState }) => {
-    const state = getState() as { auth: AuthState }
-    const token = state.auth.token
-    return await getTodosFromServer(page, limit, filter, token)
+  async ({ page, limit, filter }) => {
+    return await getTodosFromServer(page, limit, filter)
   },
 )
 
-export const addTodo = createAsyncThunk('todos/addTodo', async (text: string, { getState }) => {
-  const state = getState() as { auth: AuthState }
-  const token = state.auth.token
-  return await createTodo(text, token)
+export const addTodo = createAsyncThunk('todos/addTodo', async (text: string) => {
+  return await createTodo(text)
 })
 
-export const removeTodo = createAsyncThunk('todos/removeTodo', async (id: number, { getState }) => {
-  const state = getState() as { auth: AuthState }
-  const token = state.auth.token
-  await deleteTodo(id, token)
+export const removeTodo = createAsyncThunk('todos/removeTodo', async (id: number) => {
+  await deleteTodo(id)
   return id
 })
 
-export const editTodo = createAsyncThunk(
-  'todos/editTodo',
-  async ({ id, text }: { id: number; text: string }, { getState }) => {
-    const inputUpperFirst = text.slice(0, 1).toUpperCase() + text.slice(1)
-    const state = getState() as { auth: AuthState }
-    const token = state.auth.token
-    return await updateTodo(id, inputUpperFirst, token)
-  },
-)
+export const editTodo = createAsyncThunk('todos/editTodo', async ({ id, text }: { id: number; text: string }) => {
+  const inputUpperFirst = text.slice(0, 1).toUpperCase() + text.slice(1)
+  return await updateTodo(id, inputUpperFirst)
+})
 
-export const toggleTodoItem = createAsyncThunk('todos/toggleTodoItem', async (id: number, { getState }) => {
-  const state = getState() as { auth: AuthState }
-  const token = state.auth.token
-  return await toggleTodo(id, token)
+export const toggleTodoItem = createAsyncThunk('todos/toggleTodoItem', async (id: number) => {
+  return await toggleTodo(id)
 })
 
 const todoSlice = createSlice({
   name: 'todos',
   initialState: {
     todos: [] as ToDoItemType[],
-    isLoading: false,
+    isLoading: true,
     page: 1,
     totalPages: 1,
     limit: 5,

@@ -8,13 +8,32 @@ export const authApi = axios.create({
 })
 
 export const refresh = async () => {
-  const refreshToken = getCookie('refreshToken')
-  if (!refreshToken) throw new Error('No refresh token')
+  let refreshToken = getCookie('refreshToken')
+  if (refreshToken) {
+    refreshToken = decodeURIComponent(refreshToken)
+  } else {
+    throw new Error('No refresh token')
+  }
   const resp = await authApi.post('/auth/refresh', { refreshToken })
   return resp.data
 }
 
-export const refreshInterceptor = (apiInstance: AxiosInstance) => {
+export const requestInterceptor = (apiInstance: AxiosInstance) => {
+  apiInstance.interceptors.request.use(
+    async (config) => {
+      const { store } = await import('@/store')
+      const accessToken = store.getState().auth.token
+
+      if (accessToken) {
+        config.headers['Authorization'] = `Bearer ${accessToken}`
+      }
+      return config
+    },
+    (error) => Promise.reject(error),
+  )
+}
+
+export const interceptors = (apiInstance: AxiosInstance) => {
   apiInstance.interceptors.response.use(
     (res) => res,
     async (err) => {
@@ -35,7 +54,7 @@ export const refreshInterceptor = (apiInstance: AxiosInstance) => {
 
           store.dispatch({ type: 'auth/setToken', payload: data.accessToken })
 
-          document.cookie = `refreshToken=${encodeURIComponent(data.refreshToken)}; path=/; SameSite=Lax`
+          document.cookie = `refreshToken=${encodeURIComponent(data.refreshToken)}`
 
           apiInstance.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`
           originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`
@@ -53,8 +72,5 @@ export const refreshInterceptor = (apiInstance: AxiosInstance) => {
   return apiInstance
 }
 
-export const protectedApi = refreshInterceptor(
-  axios.create({
-    baseURL: 'http://localhost:3001',
-  }),
-)
+requestInterceptor(authApi)
+export const protectedApi = interceptors(authApi)

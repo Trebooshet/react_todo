@@ -7,7 +7,6 @@ import type { AuthState } from '@/utils/Types.ts'
 const initialState: AuthState = {
   user: null,
   token: null,
-  status: 'idle',
   isLoggedIn: false,
 }
 
@@ -26,6 +25,9 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async ({ email, password }: { email: string; password: string }, { rejectWithValue }) => {
+    if (!email || !password) {
+      return rejectWithValue('Заполните поля логин и пароль')
+    }
     try {
       return await login(email, password)
     } catch (e) {
@@ -35,18 +37,14 @@ export const loginUser = createAsyncThunk(
   },
 )
 
-export const profile = createAsyncThunk('auth/profile', async (_, { getState }) => {
-  const state = getState() as { auth: AuthState }
-  const token = state.auth.token
-  return await me(token)
+export const profile = createAsyncThunk('auth/profile', async () => {
+  return await me()
 })
 
 export const changePass = createAsyncThunk(
   'auth/changePass',
-  async ({ oldPassword, newPassword }: { oldPassword: string; newPassword: string }, { getState }) => {
-    const state = getState() as { auth: AuthState }
-    const token = state.auth.token
-    return changePassword(oldPassword, newPassword, token)
+  async ({ oldPassword, newPassword }: { oldPassword: string; newPassword: string }) => {
+    return changePassword(oldPassword, newPassword)
   },
 )
 
@@ -57,7 +55,6 @@ const authSlice = createSlice({
     logoutUser: (state) => {
       state.token = null
       state.user = null
-      state.status = 'idle'
       state.isLoggedIn = false
       deleteCookie('refreshToken')
     },
@@ -71,12 +68,10 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.token = action.payload.accessToken
         state.isLoggedIn = true
-        console.log('Аксесс токен зарегистрированного юзера', action.payload.accessToken)
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.token = action.payload.accessToken
         state.isLoggedIn = true
-        console.log('Аксесс токен залогиненого юзера', action.payload.accessToken)
       })
       .addCase(profile.fulfilled, (state, action) => {
         state.user = action.payload

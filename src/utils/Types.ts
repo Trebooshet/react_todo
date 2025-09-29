@@ -15,7 +15,6 @@ export type User = {
 export interface AuthState {
   user: User
   token: string | null
-  status: 'idle' | 'loading' | 'failed'
   isLoggedIn: boolean
 }
 
@@ -40,5 +39,3 @@ export type ToDoItemProps = {
   editedText: string
   setEditedText: (text: string) => void
 }
-
-export type AddToDoProps = { addToDoItem: (item: ToDoItemType) => void }
